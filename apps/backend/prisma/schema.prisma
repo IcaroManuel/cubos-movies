@@ -27,6 +27,7 @@ model Movie {
   releaseDate    DateTime
   duration       String
   ageRating      String
+  status         String
   votes          Int      @default(0)
   score          Float    @default(0)
   language       String
