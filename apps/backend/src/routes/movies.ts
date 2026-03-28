@@ -1,10 +1,13 @@
-import { FastifyInstance } from "fastify/types/instance";
-import { verifyJwt } from "../midlewares/verify-jwt";
-import { createMovieSchema } from "../schemas/createMovieSchema";
-import { prisma } from "../lib/prisma";
 import { z } from "zod";
-import { updateMovieSchema } from "../schemas/updateMovieSchema";
+import { FastifyInstance } from "fastify/types/instance";
+import { isFuture, differenceInMilliseconds } from 'date-fns';
+
+import { prisma } from "../lib/prisma";
+import { verifyJwt } from "../midlewares/verify-jwt";
 import { uuidSchema } from "../schemas/uuidSchema";
+import { updateMovieSchema } from "../schemas/updateMovieSchema";
+import { createMovieSchema } from "../schemas/createMovieSchema";
+import { emailQueue } from '../lib/queue';
 
 export async function moviesRoutes(app: FastifyInstance) {
   app.addHook('preHandler', verifyJwt);
@@ -24,6 +27,22 @@ export async function moviesRoutes(app: FastifyInstance) {
     const movie = await prisma.movie.create({
       data,
     });
+
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (user && isFuture(data.releaseDate)) {
+      const delay = differenceInMilliseconds(data.releaseDate, new Date());
+      await emailQueue.add(
+        'send-release-email',
+        {
+          userEmail: user.email,
+          userName: user.name,
+          movieTitle: movie.title,
+        },
+        { delay }
+      );
+
+      console.log(`⏰ E-mail agendado para o filme ${movie.title} em ${data.releaseDate}`);
+    }
 
     return reply.status(201).send(movie);
   });

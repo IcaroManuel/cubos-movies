@@ -1,9 +1,13 @@
+import 'dotenv/config';
+
 import fastify from 'fastify';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import { authRoutes } from './routes/auth';
 import fastifyJwt from '@fastify/jwt';
-import { moviesRoutes } from './routes/movies';
+import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyMultipart from '@fastify/multipart';
+
+import './lib/queue';
+import { authRoutes } from './routes/auth';
+import { moviesRoutes } from './routes/movies';
 import { uploadRoutes } from './routes/upload';
 
 const app = fastify();
