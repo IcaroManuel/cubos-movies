@@ -17,5 +17,8 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "outDir": "./dist",
+    "rootDir": "..",
   },
+  "include": ["src/**/*", "../schemas/**/*"],
 }

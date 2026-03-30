@@ -4,6 +4,7 @@ import fastify from 'fastify';
 import fastifyJwt from '@fastify/jwt';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastifyMultipart from '@fastify/multipart';
+import fastifyCors from '@fastify/cors';
 
 import './lib/queue';
 import { authRoutes } from './routes/auth';
@@ -14,6 +15,11 @@ const app = fastify();
 
 app.setValidatorCompiler(validatorCompiler);
 app.setSerializerCompiler(serializerCompiler);
+
+app.register(fastifyCors, {
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+});
 
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET as string,
