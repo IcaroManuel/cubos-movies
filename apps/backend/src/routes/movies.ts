@@ -191,6 +191,22 @@ export async function moviesRoutes(app: FastifyInstance) {
       data,
     });
 
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (user && isFuture(data.releaseDate)) {
+          const delay = differenceInMilliseconds(data.releaseDate, new Date());
+          await emailQueue.add(
+            'send-release-email',
+            {
+              userEmail: user.email,
+              userName: user.name,
+              movieTitle: updatedMovie.title,
+            },
+            { delay }
+          );
+
+          console.log(`⏰ E-mail (re)agendado para o filme editado ${updatedMovie.title} em ${data.releaseDate}`);
+        }
+
     return reply.status(200).send(updatedMovie);
   });
 
