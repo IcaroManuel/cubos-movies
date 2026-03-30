@@ -7,6 +7,12 @@ interface FilterMenuProps {
   setSelectedStatus: (status: string) => void;
   selectedSort: string;
   setSelectedSort: (sort: string) => void;
+  startDate: string;
+  setStartDate: (date: string) => void;
+  endDate: string;
+  setEndDate: (date: string) => void;
+  duration: string;
+  setDuration: (duration: string) => void;
 }
 
 const genresList = ['Ação', 'Aventura', 'Ficção Científica', 'Romance', 'Animação', 'Fantasia'];
@@ -19,14 +25,25 @@ export function FilterMenu({
   setSelectedStatus,
   selectedSort,
   setSelectedSort,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+  duration,
+  setDuration,
 }: FilterMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const hasActiveFilter = Boolean(selectedGenre || selectedStatus || selectedSort);
+  const hasActiveFilter = Boolean(
+    selectedGenre || selectedStatus || selectedSort || startDate || endDate || duration,
+  );
 
   function handleClearFilters() {
     setSelectedGenre('');
     setSelectedStatus('');
     setSelectedSort('');
+    setStartDate('');
+    setEndDate('');
+    setDuration('');
     setIsOpen(false);
   }
 
@@ -47,8 +64,48 @@ export function FilterMenu({
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-14 z-50 mt-2 w-72 rounded-lg bg-[var(--mauve-2)] p-5 shadow-2xl border border-[var(--mauve-4)]">
-          {/* Gênero */}
+        <div className="absolute right-0 top-14 z-50 mt-2 w-80 rounded-lg bg-[var(--mauve-2)] p-5 shadow-2xl border border-[var(--mauve-4)] max-h-[70vh] overflow-y-auto">
+          <div className="mb-4">
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--mauve-11)]">
+              Data de Lançamento
+            </label>
+            <div className="flex gap-2">
+              <div className="w-1/2">
+                <span className="text-xs text-[var(--mauve-11)] mb-1 block">De:</span>
+                <input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none [color-scheme:dark]"
+                />
+              </div>
+              <div className="w-1/2">
+                <span className="text-xs text-[var(--mauve-11)] mb-1 block">Até:</span>
+                <input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none [color-scheme:dark]"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--mauve-11)]">
+              Duração Exata
+            </label>
+            <input
+              type="text"
+              placeholder="Ex: 120, 2h"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none placeholder:text-[var(--mauve-11)]/50"
+            />
+          </div>
+
+          <div className="h-[1px] w-full bg-[var(--mauve-4)] my-4"></div>
+
           <div className="mb-4">
             <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-[var(--mauve-11)]">
               Gênero

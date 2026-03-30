@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react'; // NOVO: Importamos o useEffect
+import { useState, useEffect } from 'react';
 import { api } from '../lib/api';
 import type { MoviesResponse } from '../dtos/movies';
 import { useDebounce } from '../hooks/useDebounce';
@@ -13,19 +13,43 @@ export function Home() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedSort, setSelectedSort] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [duration, setDuration] = useState('');
+
   const [page, setPage] = useState(1);
 
   const debouncedSearch = useDebounce(search, 500);
+  const debouncedDuration = useDebounce(duration, 500);
+
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, selectedGenre, selectedStatus, selectedSort]);
+  }, [
+    debouncedSearch,
+    selectedGenre,
+    selectedStatus,
+    selectedSort,
+    startDate,
+    endDate,
+    debouncedDuration,
+  ]);
 
   const {
     data: response,
     isLoading,
     isError,
   } = useQuery<MoviesResponse>({
-    queryKey: ['movies', debouncedSearch, selectedGenre, selectedStatus, selectedSort, page],
+    queryKey: [
+      'movies',
+      debouncedSearch,
+      selectedGenre,
+      selectedStatus,
+      selectedSort,
+      startDate,
+      endDate,
+      debouncedDuration,
+      page,
+    ],
     queryFn: async () => {
       const res = await api.get('/movies', {
         params: {
@@ -33,6 +57,9 @@ export function Home() {
           genre: selectedGenre || undefined,
           status: selectedStatus || undefined,
           sort: selectedSort || undefined,
+          startDate: startDate || undefined,
+          endDate: endDate || undefined,
+          duration: debouncedDuration || undefined,
           page: page,
           limit: 10,
         },
@@ -51,7 +78,7 @@ export function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--mauve-1)]/30 to-[var(--mauve-1)]" />
         </div>
 
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row gap-4 relative z-50">
           <div className="relative w-full md:w-[400px]">
             <input
               type="text"
@@ -60,6 +87,7 @@ export function Home() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full rounded bg-[var(--mauve-2)] p-3 pr-10 text-white border border-[var(--mauve-4)] focus:border-[var(--purple-9)] focus:outline-none transition-colors placeholder-[var(--mauve-11)]"
             />
+            {/* Ícone da Lupa */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -84,6 +112,13 @@ export function Home() {
               setSelectedStatus={setSelectedStatus}
               selectedSort={selectedSort}
               setSelectedSort={setSelectedSort}
+              // Passando as novas props
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+              duration={duration}
+              setDuration={setDuration}
             />
 
             <Link
@@ -96,16 +131,22 @@ export function Home() {
         </div>
       </div>
 
-      {isLoading && <p className="text-[var(--mauve-11)]">Buscando filmes...</p>}
-      {isError && <p className="text-red-400">Erro ao carregar os filmes.</p>}
+      {isLoading && <p className="text-[var(--mauve-11)] relative z-10">Buscando filmes...</p>}
+      {isError && <p className="text-red-400 relative z-10">Erro ao carregar os filmes.</p>}
       {!isLoading && !isError && response?.data.length === 0 && (
-        <p className="text-[var(--mauve-11)]">Nenhum filme encontrado com os filtros atuais.</p>
+        <p className="text-[var(--mauve-11)] relative z-10">
+          Nenhum filme encontrado com os filtros atuais.
+        </p>
       )}
 
-      <MovieList movies={response?.data ?? []} />
+      <div className="relative z-10">
+        <MovieList movies={response?.data ?? []} />
+      </div>
 
       {!isLoading && !isError && response?.totalPages && (
-        <Pagination currentPage={page} totalPages={response.totalPages} onPageChange={setPage} />
+        <div className="relative z-10">
+          <Pagination currentPage={page} totalPages={response.totalPages} onPageChange={setPage} />
+        </div>
       )}
     </>
   );

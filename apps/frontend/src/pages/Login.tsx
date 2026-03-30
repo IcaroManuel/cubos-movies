@@ -3,10 +3,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '../../../schemas/loginSchema';
 import { Input } from '../components/Input';
 import { useAuth, type LoginForm } from '../hooks/useAuth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,6 +17,13 @@ export function Login() {
   } = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
   });
+
+  useEffect(() => {
+    const token = localStorage.getItem('@cubos-movies:token');
+    if (token) {
+      navigate('/movies');
+    }
+  }, [navigate]);
 
   return (
     <div className="relative flex flex-1 w-full flex-col bg-[var(--mauve-1)]">

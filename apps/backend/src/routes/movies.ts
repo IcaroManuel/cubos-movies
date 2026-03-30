@@ -62,59 +62,78 @@ export async function moviesRoutes(app: FastifyInstance) {
   });
 
   app.get('/', async (request, reply) => {
-    const {
-      search,
-      genre,
-      status,
-      sort,
-      page = '1',
-      limit = '10',
-    } = request.query as {
-      search?: string;
-      genre?: string;
-      status?: string;
-      sort?: string;
-      page?: string;
-      limit?: string;
-    };
+      const {
+        search,
+        genre,
+        status,
+        sort,
+        startDate,
+        endDate,
+        duration,
+        page = '1',
+        limit = '10',
+      } = request.query as {
+        search?: string;
+        genre?: string;
+        status?: string;
+        sort?: string;
+        startDate?: string;
+        endDate?: string;
+        duration?: string;
+        page?: string;
+        limit?: string;
+      };
 
-    const userId = request.user.sub;
-    let orderByConfig: any = { createdAt: 'desc' };
+      const userId = request.user.sub;
+      let orderByConfig: any = { createdAt: 'desc' };
 
-    if (sort === 'score_desc') {
-      orderByConfig = { score: 'desc' };
-    } else if (sort === 'score_asc') {
-      orderByConfig = { score: 'asc' };
-    }
-    const pageNumber = Number(page);
-    const takeNumber = Number(limit);
-    const skipNumber = (pageNumber - 1) * takeNumber;
+      if (sort === 'score_desc') {
+        orderByConfig = { score: 'desc' };
+      } else if (sort === 'score_asc') {
+        orderByConfig = { score: 'asc' };
+      }
+      const pageNumber = Number(page);
+      const takeNumber = Number(limit);
+      const skipNumber = (pageNumber - 1) * takeNumber;
 
-    const whereConfig = {
-      userId,
-      ...(search ? { title: { contains: search, mode: 'insensitive' as const } } : {}),
-      ...(genre ? { genres: { has: genre } } : {}),
-      ...(status ? { status: status } : {}),
-    };
-    const [totalCount, movies] = await Promise.all([
-      prisma.movie.count({ where: whereConfig }),
-      prisma.movie.findMany({
-        where: whereConfig,
-        orderBy: orderByConfig,
-        skip: skipNumber,
-        take: takeNumber,
-      }),
-    ]);
+      const whereConfig: any = {
+        userId,
+        ...(search ? { title: { contains: search, mode: 'insensitive' as const } } : {}),
+        ...(genre ? { genres: { has: genre } } : {}),
+        ...(status ? { status: status } : {}),
+        ...(duration ? { duration: { contains: duration, mode: 'insensitive' as const } } : {}),
+      };
+      if (startDate || endDate) {
+        whereConfig.releaseDate = {};
 
-    const totalPages = Math.ceil(totalCount / takeNumber);
+        if (startDate) {
+          whereConfig.releaseDate.gte = new Date(startDate).toISOString();
+        }
 
-    return reply.send({
-      data: movies,
-      totalPages: totalPages,
-      currentPage: pageNumber,
-      totalItems: totalCount,
+        if (endDate) {
+          whereConfig.releaseDate.lte = new Date(`${endDate}T23:59:59.999Z`).toISOString();
+        }
+      }
+
+      const [totalCount, movies] = await Promise.all([
+        prisma.movie.count({ where: whereConfig }),
+        prisma.movie.findMany({
+          where: whereConfig,
+          orderBy: orderByConfig,
+          skip: skipNumber,
+          take: takeNumber,
+        }),
+      ]);
+
+      const totalPages = Math.ceil(totalCount / takeNumber);
+
+      return reply.send({
+        data: movies,
+        totalPages: totalPages,
+        currentPage: pageNumber,
+        totalItems: totalCount,
+      });
     });
-  });
 
   app.get('/:id', async (request, reply) => {
     const { id } = uuidSchema.parse(request.params);
