@@ -3,7 +3,7 @@ import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { r2 } from '../lib/cloudflare';
 import crypto from 'node:crypto';
 import { extname } from 'node:path';
-import { verifyJwt } from '../midlewares/verify-jwt';
+import { verifyJwt } from '../middlewares/verify-jwt';
 
 export async function uploadRoutes(app: FastifyInstance) {
   app.addHook('preHandler', verifyJwt);

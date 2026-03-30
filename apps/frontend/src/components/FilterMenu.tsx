@@ -76,7 +76,7 @@ export function FilterMenu({
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none [color-scheme:dark]"
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
                 />
               </div>
               <div className="w-1/2">
@@ -85,7 +85,7 @@ export function FilterMenu({
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none [color-scheme:dark]"
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
                 />
               </div>
             </div>

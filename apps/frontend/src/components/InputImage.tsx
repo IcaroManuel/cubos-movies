@@ -1,9 +1,10 @@
 import { type InputHTMLAttributes } from 'react';
+import type { FieldValues, UseFormRegister } from 'react-hook-form';
 
 interface InputImageProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
   label: string;
   name: string;
-  register: any;
+  register: UseFormRegister<FieldValues>;
   error?: string;
   helperText?: string;
 }

@@ -2,12 +2,13 @@ import { FastifyInstance } from 'fastify/types/instance';
 import { isFuture, differenceInMilliseconds } from 'date-fns';
 
 import { prisma } from '../lib/prisma';
-import { verifyJwt } from '../midlewares/verify-jwt';
+import { verifyJwt } from '../middlewares/verify-jwtt';
 import { createMovieSchema } from '../../../schemas/createMovieSchema';
 
 import { uuidSchema } from '../../../schemas/uuidSchema';
 
 import { emailQueue } from '../lib/queue';
+import { Prisma } from '@prisma/client';
 
 export async function moviesRoutes(app: FastifyInstance) {
   app.addHook('preHandler', verifyJwt);
@@ -52,7 +53,11 @@ export async function moviesRoutes(app: FastifyInstance) {
           userName: user.name,
           movieTitle: movie.title,
         },
-        { delay },
+        {
+          delay,
+          jobId: `release-email-${movie.id}`,
+          removeOnComplete: true,
+        },
       );
 
       console.log(`⏰ E-mail agendado para o filme ${movie.title} em ${data.releaseDate}`);
@@ -85,7 +90,7 @@ export async function moviesRoutes(app: FastifyInstance) {
       };
 
       const userId = request.user.sub;
-      let orderByConfig: any = { createdAt: 'desc' };
+      let orderByConfig: Prisma.MovieOrderByWithRelationInput = { createdAt: 'desc' };
 
       if (sort === 'score_desc') {
         orderByConfig = { score: 'desc' };
@@ -96,7 +101,7 @@ export async function moviesRoutes(app: FastifyInstance) {
       const takeNumber = Number(limit);
       const skipNumber = (pageNumber - 1) * takeNumber;
 
-      const whereConfig: any = {
+      const whereConfig: Prisma.MovieWhereInput = {
         userId,
         ...(search ? { title: { contains: search, mode: 'insensitive' as const } } : {}),
         ...(genre ? { genres: { has: genre } } : {}),

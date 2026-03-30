@@ -1,9 +1,10 @@
 import { type InputHTMLAttributes } from 'react';
+import type { FieldValues, UseFormRegister } from 'react-hook-form';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   name: string;
-  register: any;
+  register: UseFormRegister<FieldValues>;
   error?: string;
 }
 

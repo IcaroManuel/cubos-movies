@@ -52,7 +52,7 @@ export function useMovie() {
 
       await api.post('/movies', {
         title: data.title,
-        originalTitle: data.title,
+        originalTitle: data.originalTitle ?? data.title,
         synopsis: data.synopsis,
         releaseDate: new Date(data.releaseDate).toISOString(),
         duration: data.duration,
@@ -114,10 +114,9 @@ export function useMovie() {
               .filter(Boolean)
           : data.genres;
 
-      // CORREÇÃO: Utilizando movie.id em vez da variável id que não existia aqui
       await api.put(`/movies/${movie.id}`, {
         title: data.title,
-        originalTitle: data.title,
+        originalTitle: data.originalTitle ?? data.title,
         synopsis: data.synopsis,
         releaseDate: new Date(data.releaseDate).toISOString(),
         duration: data.duration,
