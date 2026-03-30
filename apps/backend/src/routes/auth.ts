@@ -50,7 +50,7 @@ export async function authRoutes(app: FastifyInstance) {
       {
         sub: user.id,
         expiresIn: '7d',
-      }
+      },
     );
 
     return reply.status(200).send({

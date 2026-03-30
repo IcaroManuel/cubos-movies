@@ -1,4 +1,3 @@
-
 import { FastifyRequest, FastifyReply } from 'fastify';
 
 export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {

@@ -23,14 +23,13 @@ app.register(fastifyCors, {
 
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET as string,
-})
+});
 app.register(fastifyMultipart);
 
-app.register(authRoutes, {prefix: '/auth'});
-app.register(moviesRoutes, { prefix: '/movies' })
-app.register(uploadRoutes, { prefix: '/upload' })
+app.register(authRoutes, { prefix: '/auth' });
+app.register(moviesRoutes, { prefix: '/movies' });
+app.register(uploadRoutes, { prefix: '/upload' });
 
-
-app.listen({port: 3333, host: '0.0.0.0'}).then(() => {
+app.listen({ port: 3333, host: '0.0.0.0' }).then(() => {
   console.log('🚀 Servidor HTTP rodando na porta 3333!');
 });

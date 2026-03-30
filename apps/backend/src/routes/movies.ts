@@ -1,13 +1,13 @@
-import { FastifyInstance } from "fastify/types/instance";
+import { FastifyInstance } from 'fastify/types/instance';
 import { isFuture, differenceInMilliseconds } from 'date-fns';
 
-import { prisma } from "../lib/prisma";
-import { verifyJwt } from "../midlewares/verify-jwt";
-import { createMovieSchema } from "../../../schemas/createMovieSchema";
+import { prisma } from '../lib/prisma';
+import { verifyJwt } from '../midlewares/verify-jwt';
+import { createMovieSchema } from '../../../schemas/createMovieSchema';
 
-import { uuidSchema } from "../../../schemas/uuidSchema";
+import { uuidSchema } from '../../../schemas/uuidSchema';
 
-import { emailQueue } from "../lib/queue";
+import { emailQueue } from '../lib/queue';
 
 export async function moviesRoutes(app: FastifyInstance) {
   app.addHook('preHandler', verifyJwt);
@@ -16,23 +16,27 @@ export async function moviesRoutes(app: FastifyInstance) {
     const parsed = createMovieSchema.parse(request.body);
     const userId = request.user.sub;
     const { backgroundFile, posterFile, genres, ...restParsed } = parsed;
-    const genresArray = typeof genres === 'string'
-          ? genres.split(',').map((g) => g.trim()).filter(Boolean)
-          : (genres || []);
+    const genresArray =
+      typeof genres === 'string'
+        ? genres
+            .split(',')
+            .map((g) => g.trim())
+            .filter(Boolean)
+        : genres || [];
 
     const data = {
-          ...restParsed,
-          genres: genresArray,
-          userId,
-          originalTitle: restParsed.originalTitle ?? null,
-          trailerUrl: restParsed.trailerUrl ?? null,
-          posterUrl: restParsed.posterUrl ?? null,
-          backgroundUrl: restParsed.backgroundUrl ?? null,
-          votes: restParsed.votes ?? 0,
-          revenue: restParsed.revenue ?? 0,
-          profit: restParsed.profit ?? 0,
-          score: restParsed.score ?? 0,
-        };
+      ...restParsed,
+      genres: genresArray,
+      userId,
+      originalTitle: restParsed.originalTitle ?? null,
+      trailerUrl: restParsed.trailerUrl ?? null,
+      posterUrl: restParsed.posterUrl ?? null,
+      backgroundUrl: restParsed.backgroundUrl ?? null,
+      votes: restParsed.votes ?? 0,
+      revenue: restParsed.revenue ?? 0,
+      profit: restParsed.profit ?? 0,
+      score: restParsed.score ?? 0,
+    };
 
     const movie = await prisma.movie.create({
       data,
@@ -48,7 +52,7 @@ export async function moviesRoutes(app: FastifyInstance) {
           userName: user.name,
           movieTitle: movie.title,
         },
-        { delay }
+        { delay },
       );
 
       console.log(`⏰ E-mail agendado para o filme ${movie.title} em ${data.releaseDate}`);
@@ -58,7 +62,14 @@ export async function moviesRoutes(app: FastifyInstance) {
   });
 
   app.get('/', async (request, reply) => {
-    const { search, genre, status, sort, page = '1', limit = '10' } = request.query as {
+    const {
+      search,
+      genre,
+      status,
+      sort,
+      page = '1',
+      limit = '10',
+    } = request.query as {
       search?: string;
       genre?: string;
       status?: string;
@@ -92,7 +103,7 @@ export async function moviesRoutes(app: FastifyInstance) {
         orderBy: orderByConfig,
         skip: skipNumber,
         take: takeNumber,
-      })
+      }),
     ]);
 
     const totalPages = Math.ceil(totalCount / takeNumber);
@@ -101,79 +112,83 @@ export async function moviesRoutes(app: FastifyInstance) {
       data: movies,
       totalPages: totalPages,
       currentPage: pageNumber,
-      totalItems: totalCount
+      totalItems: totalCount,
     });
   });
 
   app.get('/:id', async (request, reply) => {
-      const { id } = uuidSchema.parse(request.params);
-      const userId = request.user.sub;
-      const movie = await prisma.movie.findFirst({
-        where: {
-          id,
-          userId,
-        },
-      });
-
-      if (!movie) {
-        return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
-      }
-      return reply.status(200).send(movie);
+    const { id } = uuidSchema.parse(request.params);
+    const userId = request.user.sub;
+    const movie = await prisma.movie.findFirst({
+      where: {
+        id,
+        userId,
+      },
     });
+
+    if (!movie) {
+      return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
+    }
+    return reply.status(200).send(movie);
+  });
 
   app.put('/:id', async (request, reply) => {
-        const { id } = uuidSchema.parse(request.params);
-        const parsed = createMovieSchema.parse(request.body);
-        const userId = request.user.sub;
+    const { id } = uuidSchema.parse(request.params);
+    const parsed = createMovieSchema.parse(request.body);
+    const userId = request.user.sub;
 
-        const existingMovie = await prisma.movie.findFirst({
-              where: { id, userId },
-            });
-
-            if (!existingMovie) {
-              return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
-            }
-
-        const { backgroundFile, posterFile, genres, ...restParsed } = parsed;
-        const genresArray = typeof genres === 'string'
-              ? genres.split(',').map((g) => g.trim()).filter(Boolean)
-              : (genres || existingMovie.genres);
-
-        const data = {
-              ...restParsed,
-              genres: genresArray,
-              originalTitle: restParsed.originalTitle ?? existingMovie.originalTitle,
-              trailerUrl: restParsed.trailerUrl ?? existingMovie.trailerUrl,
-              posterUrl: restParsed.posterUrl ?? existingMovie.posterUrl,
-              backgroundUrl: restParsed.backgroundUrl ?? existingMovie.backgroundUrl,
-              revenue: restParsed.revenue ?? existingMovie.revenue,
-              profit: restParsed.profit ?? existingMovie.profit,
-              votes: restParsed.votes ?? existingMovie.votes,
-              score: restParsed.score ?? existingMovie.score,
-            };
-
-        const updatedMovie = await prisma.movie.update({
-          where: { id },
-          data,
-        });
-
-        return reply.status(200).send(updatedMovie);
+    const existingMovie = await prisma.movie.findFirst({
+      where: { id, userId },
     });
+
+    if (!existingMovie) {
+      return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
+    }
+
+    const { backgroundFile, posterFile, genres, ...restParsed } = parsed;
+    const genresArray =
+      typeof genres === 'string'
+        ? genres
+            .split(',')
+            .map((g) => g.trim())
+            .filter(Boolean)
+        : genres || existingMovie.genres;
+
+    const data = {
+      ...restParsed,
+      genres: genresArray,
+      originalTitle: restParsed.originalTitle ?? existingMovie.originalTitle,
+      trailerUrl: restParsed.trailerUrl ?? existingMovie.trailerUrl,
+      posterUrl: restParsed.posterUrl ?? existingMovie.posterUrl,
+      backgroundUrl: restParsed.backgroundUrl ?? existingMovie.backgroundUrl,
+      revenue: restParsed.revenue ?? existingMovie.revenue,
+      profit: restParsed.profit ?? existingMovie.profit,
+      votes: restParsed.votes ?? existingMovie.votes,
+      score: restParsed.score ?? existingMovie.score,
+    };
+
+    const updatedMovie = await prisma.movie.update({
+      where: { id },
+      data,
+    });
+
+    return reply.status(200).send(updatedMovie);
+  });
 
   app.delete('/:id', async (request, reply) => {
-      const { id } = uuidSchema.parse(request.params);
-      const userId = request.user.sub;
-      const movieExists = await prisma.movie.findFirst({
-        where: { id, userId },
-      });
-
-      if (!movieExists) {
-        return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
-      }
-      await prisma.movie.delete({
-        where: { id },
-      });
-
-      return reply.status(204).send();
+    const { id } = uuidSchema.parse(request.params);
+    const userId = request.user.sub;
+    const movieExists = await prisma.movie.findFirst({
+      where: { id, userId },
     });
+
+    if (!movieExists) {
+      return reply.status(404).send({ message: 'Filme não encontrado ou acesso negado.' });
+    }
+    await prisma.movie.delete({
+      where: { id },
+    });
+
+    return reply.status(204).send();
+  });
 }

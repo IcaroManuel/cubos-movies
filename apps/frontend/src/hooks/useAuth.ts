@@ -35,8 +35,7 @@ export function useAuth() {
       });
       navigate('/login');
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data?.message || 'Erro ao criar conta. Tente novamente.';
+      const errorMessage = error.response?.data?.message || 'Erro ao criar conta. Tente novamente.';
       setError('root', { message: errorMessage });
     }
   }

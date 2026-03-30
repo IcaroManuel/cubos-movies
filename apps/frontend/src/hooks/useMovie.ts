@@ -10,11 +10,13 @@ export type CreateMovieForm = z.infer<typeof createMovieSchema>;
 export type EditMovieForm = z.infer<typeof editMovieSchema>;
 
 export function useMovie() {
-
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  async function createMovie(data: CreateMovieForm, setSubmitError: React.Dispatch<React.SetStateAction<string | null>>) {
+  async function createMovie(
+    data: CreateMovieForm,
+    setSubmitError: React.Dispatch<React.SetStateAction<string | null>>,
+  ) {
     try {
       setSubmitError(null);
       let posterUrl = '';
@@ -40,9 +42,13 @@ export function useMovie() {
         backgroundUrl = uploadResponse.data.backgroundUrl;
       }
 
-      const genresArray = typeof data.genres === 'string'
-        ? data.genres.split(',').map((g) => g.trim()).filter(Boolean)
-        : data.genres;
+      const genresArray =
+        typeof data.genres === 'string'
+          ? data.genres
+              .split(',')
+              .map((g) => g.trim())
+              .filter(Boolean)
+          : data.genres;
 
       await api.post('/movies', {
         title: data.title,
@@ -70,7 +76,11 @@ export function useMovie() {
     }
   }
 
-  async function editMovie(data: EditMovieForm, movie: Movie, setSubmitError: React.Dispatch<React.SetStateAction<string | null>>) {
+  async function editMovie(
+    data: EditMovieForm,
+    movie: Movie,
+    setSubmitError: React.Dispatch<React.SetStateAction<string | null>>,
+  ) {
     try {
       setSubmitError(null);
       let posterUrl = movie.posterUrl;
@@ -96,9 +106,13 @@ export function useMovie() {
         backgroundUrl = uploadResponse.data.backgroundUrl;
       }
 
-      const genresArray = typeof data.genres === 'string'
-        ? data.genres.split(',').map((g) => g.trim()).filter(Boolean)
-        : data.genres;
+      const genresArray =
+        typeof data.genres === 'string'
+          ? data.genres
+              .split(',')
+              .map((g) => g.trim())
+              .filter(Boolean)
+          : data.genres;
 
       // CORREÇÃO: Utilizando movie.id em vez da variável id que não existia aqui
       await api.put(`/movies/${movie.id}`, {
