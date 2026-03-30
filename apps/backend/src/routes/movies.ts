@@ -2,7 +2,7 @@ import { FastifyInstance } from 'fastify/types/instance';
 import { isFuture, differenceInMilliseconds } from 'date-fns';
 
 import { prisma } from '../lib/prisma';
-import { verifyJwt } from '../middlewares/verify-jwtt';
+import { verifyJwt } from '../middlewares/verify-jwt';
 import { createMovieSchema } from '../../../schemas/createMovieSchema';
 
 import { uuidSchema } from '../../../schemas/uuidSchema';
@@ -140,6 +140,7 @@ export async function moviesRoutes(app: FastifyInstance) {
       });
     });
 
+
   app.get('/:id', async (request, reply) => {
     const { id } = uuidSchema.parse(request.params);
     const userId = request.user.sub;
@@ -197,17 +198,21 @@ export async function moviesRoutes(app: FastifyInstance) {
     });
 
     const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (user && isFuture(data.releaseDate)) {
-          const delay = differenceInMilliseconds(data.releaseDate, new Date());
-          await emailQueue.add(
-            'send-release-email',
-            {
-              userEmail: user.email,
-              userName: user.name,
-              movieTitle: updatedMovie.title,
-            },
-            { delay }
-          );
+    if (user && isFuture(data.releaseDate)) {
+      const delay = differenceInMilliseconds(data.releaseDate, new Date());
+      await emailQueue.add(
+        'send-release-email',
+        {
+          userEmail: user.email,
+          userName: user.name,
+          movieTitle: updatedMovie.title,
+        },
+        {
+          delay,
+          jobId: `release-email-${updatedMovie.id}`,
+          removeOnComplete: true,
+        }
+      );
 
           console.log(`⏰ E-mail (re)agendado para o filme editado ${updatedMovie.title} em ${data.releaseDate}`);
         }

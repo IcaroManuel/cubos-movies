@@ -51,7 +51,7 @@ export function FilterMenu({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`rounded px-6 py-3 font-semibold text-white transition-colors border bg-[color-mix(in_srgb,var(--purple-13)_10%,transparent)] ${
+        className={`rounded px-6 py-3 font-semibold text-[var(--mauve-11)] transition-colors border bg-[color-mix(in_srgb,var(--purple-13)_10%,transparent)] ${
           hasActiveFilter
             ? 'bg-[var(--mauve-4)] border-[var(--purple-9)]'
             : 'bg-[var(--mauve-3)] border-transparent hover:bg-[var(--mauve-4)]'
@@ -76,7 +76,7 @@ export function FilterMenu({
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
                 />
               </div>
               <div className="w-1/2">
@@ -85,7 +85,7 @@ export function FilterMenu({
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
+                  className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
                 />
               </div>
             </div>
@@ -100,7 +100,7 @@ export function FilterMenu({
               placeholder="Ex: 120, 2h"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none placeholder:text-[var(--mauve-11)]/50"
+              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none placeholder:text-[var(--mauve-11)]/50"
             />
           </div>
 
@@ -113,7 +113,7 @@ export function FilterMenu({
             <select
               value={selectedGenre}
               onChange={(e) => setSelectedGenre(e.target.value)}
-              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
+              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
             >
               <option value="">Todos os gêneros</option>
               {genresList.map((g) => (
@@ -131,7 +131,7 @@ export function FilterMenu({
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
-              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
+              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
             >
               <option value="">Todas as situações</option>
               {statusList.map((s) => (
@@ -149,7 +149,7 @@ export function FilterMenu({
             <select
               value={selectedSort}
               onChange={(e) => setSelectedSort(e.target.value)}
-              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-white border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
+              className="w-full rounded bg-[var(--mauve-3)] p-2 text-sm text-[var(--mauve-11)] border border-[var(--mauve-6)] focus:border-[var(--purple-9)] outline-none"
             >
               <option value="">Mais recentes</option>
               <option value="score_desc">Melhores avaliados</option>
@@ -160,7 +160,7 @@ export function FilterMenu({
           <div className="flex justify-end border-t border-[var(--mauve-4)] pt-4">
             <button
               onClick={handleClearFilters}
-              className="text-sm font-semibold text-[var(--mauve-11)] hover:text-white transition-colors"
+              className="text-sm font-semibold text-[var(--mauve-11)] hover:text-[var(--mauve-11)] transition-colors"
             >
               Limpar Filtros
             </button>

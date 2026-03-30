@@ -84,7 +84,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-document.documentElement.classList.add('dark');
+const saved = localStorage.getItem('theme') ?? 'dark';
+document.documentElement.classList.add(saved);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
