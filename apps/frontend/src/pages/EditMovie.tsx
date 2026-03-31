@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '../lib/api';
 import { useState, useEffect } from 'react';
@@ -13,6 +13,7 @@ export function EditMovie() {
   const { id } = useParams<{ id: string }>();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { editMovie } = useMovie();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -66,17 +67,15 @@ export function EditMovie() {
 
   return (
     <>
-      <div className="mt-8 mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[var(--mauve-12)]">Editar Filme</h1>
-        <Link
-          to={`/movies/${id}`}
-          className="text-sm text-[var(--mauve-11)] hover:text-white transition-colors"
-        >
-          Cancelar
-        </Link>
-      </div>
-
       <main className="mx-auto max-w-4xl rounded-lg bg-[var(--mauve-2)] p-8 shadow-xl border border-[var(--mauve-4)]">
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={() => navigate(`/movies/${id}`)}
+            className="rounded bg-[var(--purple-3)] px-5 py-2 text-sm font-semibold text-[var(--purple-11)] transition-colors hover:bg-[var(--purple-4)]"
+          >
+            Cancelar
+          </button>
+        </div>
         <form
           onSubmit={handleSubmit((data) => editMovie(data as EditMovieForm, movie, setSubmitError))}
           className="flex flex-col gap-6"

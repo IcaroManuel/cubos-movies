@@ -6,7 +6,7 @@ interface MovieCardProps {
 }
 export function MovieList({ movies }: MovieCardProps) {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 p-6 bg-[var(--mauve-13)]">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 p-6 bg-[var(--mauve-13)]">
       {movies?.map((movie) => {
         const radius = 36;
         const circumference = 2 * Math.PI * radius;

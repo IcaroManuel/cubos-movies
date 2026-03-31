@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { createMovieSchema } from '../../../schemas/createMovieSchema';
 import { Input } from '../components/Input';
 import { InputImage } from '../components/InputImage';
-import { Link } from 'react-router-dom';
 import { useMovie, type CreateMovieForm } from '../hooks/useMovie';
+import { useNavigate } from 'react-router-dom';
 
 export function CreateMovie() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const { createMovie } = useMovie();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -21,17 +22,15 @@ export function CreateMovie() {
 
   return (
     <>
-      <div className="mt-8 mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[var(--mauve-12)]">Cadastrar Novo Filme</h1>
-        <Link
-          to="/movies"
-          className="text-sm text-[var(--mauve-11)] hover:text-white transition-colors"
-        >
-          Cancelar
-        </Link>
-      </div>
-
       <main className="mx-auto max-w-4xl rounded-lg bg-[var(--mauve-2)] p-8 shadow-xl border border-[var(--mauve-4)]">
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={() => navigate('/movies')}
+            className="rounded bg-[var(--purple-3)] px-5 py-2 text-sm font-semibold text-[var(--purple-11)] transition-colors hover:bg-[var(--purple-4)]"
+          >
+            Cancelar
+          </button>
+        </div>
         <form
           onSubmit={handleSubmit((data) => createMovie(data as CreateMovieForm, setSubmitError))}
           className="flex flex-col gap-6"
