@@ -10,7 +10,8 @@
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "dev": "npm run dev:backend & npm run dev:frontend",
     "lint": "eslint . --ext .ts,.tsx",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "npm run build --workspace=apps/backend & npm run build --workspace=apps/frontend"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.57.2",
