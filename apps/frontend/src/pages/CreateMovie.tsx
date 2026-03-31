@@ -45,6 +45,20 @@ export function CreateMovie() {
               error={errors.title?.message?.toString()}
             />
             <Input
+              label="Título Original"
+              name="originalTitle"
+              register={register}
+              placeholder="Ex: The Avengers"
+              error={errors.originalTitle?.message?.toString()}
+            />
+            <Input
+              label="URL do Trailer (YouTube)"
+              name="trailerUrl"
+              register={register}
+              placeholder="Ex: https://youtube.com/watch?v=..."
+              error={errors.trailerUrl?.message?.toString()}
+            />
+            <Input
               label="Data de Lançamento"
               name="releaseDate"
               type="date"

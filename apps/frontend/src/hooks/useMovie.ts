@@ -29,7 +29,7 @@ export function useMovie() {
         const uploadResponse = await api.post('/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        posterUrl = uploadResponse.data.posterUrl;
+        posterUrl = uploadResponse.data.fileUrl;
       }
 
       const bFile = data.backgroundFile?.[0];
@@ -39,7 +39,7 @@ export function useMovie() {
         const uploadResponse = await api.post('/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        backgroundUrl = uploadResponse.data.backgroundUrl;
+        backgroundUrl = uploadResponse.data.fileUrl;
       }
 
       const genresArray =
@@ -54,6 +54,7 @@ export function useMovie() {
         title: data.title,
         originalTitle: data.originalTitle ?? data.title,
         synopsis: data.synopsis,
+        trailerUrl: data.trailerUrl || undefined,
         releaseDate: new Date(data.releaseDate).toISOString(),
         duration: data.duration,
         ageRating: data.ageRating,
@@ -93,7 +94,7 @@ export function useMovie() {
         const uploadResponse = await api.post('/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        posterUrl = uploadResponse.data.posterUrl;
+        posterUrl = uploadResponse.data.fileUrl;
       }
 
       const bFile = data.backgroundFile?.[0];
@@ -103,7 +104,7 @@ export function useMovie() {
         const uploadResponse = await api.post('/upload', formData, {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
-        backgroundUrl = uploadResponse.data.backgroundUrl;
+        backgroundUrl = uploadResponse.data.fileUrl;
       }
 
       const genresArray =
@@ -118,6 +119,7 @@ export function useMovie() {
         title: data.title,
         originalTitle: data.originalTitle ?? data.title,
         synopsis: data.synopsis,
+        trailerUrl: data.trailerUrl || undefined,
         releaseDate: new Date(data.releaseDate).toISOString(),
         duration: data.duration,
         ageRating: data.ageRating,

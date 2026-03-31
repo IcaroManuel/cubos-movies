@@ -67,6 +67,10 @@ export function Login() {
             <Link
               to="#"
               className="text-sm text-[var(--purple-10)] underline decoration-[var(--purple-10)] underline-offset-4 transition-colors hover:text-[var(--purple-9)]"
+              onClick={(e) => {
+                e.preventDefault();
+                alert('Funcionalidade em desenvolvimento!');
+              }}
             >
               Esqueci minha senha
             </Link>
@@ -78,6 +82,15 @@ export function Login() {
             >
               {isSubmitting ? 'Entrando...' : 'Entrar'}
             </button>
+          </div>
+          <div className="mt-6 text-center text-sm text-[var(--mauve-11)]">
+            Não tem uma conta?{' '}
+            <Link
+              to="/register"
+              className="font-semibold text-[var(--purple-10)] transition-colors hover:text-[var(--purple-9)]"
+            >
+              Cadastre-se
+            </Link>
           </div>
         </form>
       </main>

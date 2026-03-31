@@ -33,6 +33,6 @@ export async function uploadRoutes(app: FastifyInstance) {
     await r2.send(command);
     const fileUrl = `${process.env.CLOUDFLARE_PUBLIC_URL}/${fileName}`;
 
-    return reply.status(201).send({ posterUrl: fileUrl });
+    return reply.status(201).send({ fileUrl });
   });
 }

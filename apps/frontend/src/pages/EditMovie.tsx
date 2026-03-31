@@ -43,6 +43,8 @@ export function EditMovie() {
       reset({
         title: movie.title,
         synopsis: movie.synopsis,
+        originalTitle: movie.originalTitle,
+        trailerUrl: movie.trailerUrl,
         releaseDate: formattedDate as any,
         duration: movie.duration,
         ageRating: movie.ageRating,
@@ -85,6 +87,20 @@ export function EditMovie() {
               name="title"
               register={register}
               error={errors.title?.message?.toString()}
+            />
+            <Input
+              label="Título Original"
+              name="originalTitle"
+              register={register}
+              placeholder="Ex: The Avengers"
+              error={errors.originalTitle?.message?.toString()}
+            />
+            <Input
+              label="URL do Trailer (YouTube)"
+              name="trailerUrl"
+              register={register}
+              placeholder="Ex: https://youtube.com/watch?v=..."
+              error={errors.trailerUrl?.message?.toString()}
             />
             <Input
               label="Data de Lançamento"

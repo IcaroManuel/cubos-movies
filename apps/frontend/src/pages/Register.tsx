@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from '../../../schemas/registerSchema';
 import { Input } from '../components/Input';
 import { type RegisterForm, useAuth } from '../hooks/useAuth';
+import { Link } from 'react-router-dom';
 
 export function Register() {
   const { registerUser } = useAuth();
@@ -78,6 +79,15 @@ export function Register() {
           >
             {isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
           </button>
+          <div className="mt-4 text-center text-sm text-[var(--mauve-11)]">
+            Já tem uma conta?{' '}
+            <Link
+              to="/login"
+              className="font-semibold text-[var(--purple-10)] transition-colors hover:text-[var(--purple-9)]"
+            >
+              Entre aqui
+            </Link>
+          </div>
         </form>
       </main>
 
