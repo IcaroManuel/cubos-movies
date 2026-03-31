@@ -1,7 +1,22 @@
 import { useState } from 'react';
 
-// ... sua interface FilterMenuProps igual e listas (genresList, statusList) ...
+interface FilterMenuProps {
+  selectedGenre: string;
+  setSelectedGenre: (genre: string) => void;
+  selectedStatus: string;
+  setSelectedStatus: (status: string) => void;
+  selectedSort: string;
+  setSelectedSort: (sort: string) => void;
+  startDate: string;
+  setStartDate: (date: string) => void;
+  endDate: string;
+  setEndDate: (date: string) => void;
+  duration: string;
+  setDuration: (duration: string) => void;
+}
 
+const genresList = ['Ação', 'Aventura', 'Ficção Científica', 'Romance', 'Animação', 'Fantasia'];
+const statusList = ['Lançado', 'Em breve', 'Cancelado'];
 export function FilterMenu({
   selectedGenre,
   setSelectedGenre,
@@ -49,13 +64,9 @@ export function FilterMenu({
         )}
       </button>
 
-      {/* MODAL VERDADEIRA */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          {/* Overlay clicável para fechar */}
           <div className="absolute inset-0" onClick={() => setIsOpen(false)}></div>
-
-          {/* Conteúdo da Modal */}
           <div className="relative z-10 w-full max-w-md rounded-lg bg-[var(--mauve-2)] p-6 shadow-2xl border border-[var(--mauve-4)] max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-[var(--mauve-12)]">Filtrar Filmes</h2>

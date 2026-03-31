@@ -13,8 +13,10 @@ export function Header() {
   }, []);
 
   function toggleTheme() {
+    const newIsDark = !isDark;
     document.documentElement.classList.toggle('dark');
-    setIsDark(!isDark);
+    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
+    setIsDark(newIsDark);
   }
 
   function handleLogout() {
