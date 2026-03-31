@@ -1,6 +1,6 @@
 # 🎬 Cubos Movies - Desafio Fullstack
 
-![Cubos Movies](banner.png)
+![Cubos Movies](screenshots/listMoviesDark.png)
 
 Uma aplicação web completa (Fullstack) para gerenciamento de catálogo de filmes,
 com autenticação, listagem, filtros dinâmicos, tema claro/escuro e envio de
@@ -14,22 +14,22 @@ Cubos Tecnologia**.
 ## 📸 Galeria de Telas
 
 <p align="center">
-  <img src="login.png" width="45%" alt="Tela de Login" />
-  <img src="register.png" width="45%" alt="Tela de Cadastro" />
+  <img src="screenshots/login.png" width="45%" alt="Tela de Login" />
+  <img src="screenshots/register.png" width="45%" alt="Tela de Cadastro" />
 </p>
 
 <p align="center">
-  <img src="listMoviesDark.png" width="45%" alt="Listagem (Dark Mode)" />
-  <img src="listMoviesLight.png" width="45%" alt="Listagem (Light Mode)" />
+  <img src="screenshots/listMoviesDark.png" width="45%" alt="Listagem (Dark Mode)" />
+  <img src="screenshots/listMoviesLight.png" width="45%" alt="Listagem (Light Mode)" />
 </p>
 
 <p align="center">
-  <img src="filters.png" width="45%" alt="Modal de Filtros" />
-  <img src="createMovie.png" width="45%" alt="Adicionar Filme" />
+  <img src="screenshots/filters.png" width="45%" alt="Modal de Filtros" />
+  <img src="screenshots/createMovie.png" width="45%" alt="Adicionar Filme" />
 </p>
 
 <p align="center">
-  <img src="movieDetails.png" width="90%" alt="Detalhes do Filme" />
+  <img src="screenshots/movieDetails.png" width="90%" alt="Detalhes do Filme" />
 </p>
 
 ---
